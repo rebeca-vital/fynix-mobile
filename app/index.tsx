@@ -1,3 +1,4 @@
+import { useRouter } from 'expo-router';
 import React from 'react';
 import {
   Image,
@@ -8,10 +9,16 @@ import {
   View,
 } from 'react-native';
 export default function Login() {
+  const router = useRouter();
   const [login, setLogin] = React.useState("");
   const [senha, setSenha] = React.useState("");
   function handleLogin() {
-    alert("Botão entrar funcionando!");
+    if(login === "" || senha === "") {
+      alert("Prencha login e senha");
+      return;
+    }
+    router.push("/home");
+
   }
   return (
     <View style={styles.container}>
