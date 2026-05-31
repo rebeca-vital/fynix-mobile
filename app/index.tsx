@@ -47,6 +47,13 @@ export default function Login() {
           Entrar
         </Text>
       </TouchableOpacity>
+      <TouchableOpacity
+         style={styles.secondaryButton}
+         onPress={() => router.push("/register")}>
+        <Text style={styles.secondaryButtonText}>
+          Criar conta
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -80,6 +87,20 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#fff',
     fontSize: 18,
+    fontWeight: 'bold',
+  },
+  secondaryButton: {
+    marginTop: 15,
+    padding: 15,
+    borderRadius: 10,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#FF6B00',
+    backgroundColor: 'transparent',
+  },
+  secondaryButtonText: {
+    color: '#FF6B00',
+    fontSize: 16,
     fontWeight: 'bold',
   },
 });
