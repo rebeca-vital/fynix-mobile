@@ -20,7 +20,7 @@ export default function Register() {
 
     router.replace({
       pathname: "/home",
-      params: { apelido }
+      params: { apelido, email },
     });
   };
 

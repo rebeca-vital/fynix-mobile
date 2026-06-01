@@ -166,7 +166,10 @@ export default function Home() {
             </View>
 
             <View style={styles.containerLinksMenu}>
-              <TouchableOpacity style={styles.itemMenuLateral} onPress={() => { setMenuAberto(false); router.push("/perfil"); }}>
+              <TouchableOpacity style={styles.itemMenuLateral} onPress={() => { setMenuAberto(false); 
+                router.push({ pathname: "/perfil",
+                  params: { apelido: nomeUsuario, email: "" }
+                 }); }}>
                 <Text style={styles.textoItemMenu}>Perfil</Text>
               </TouchableOpacity>
 
