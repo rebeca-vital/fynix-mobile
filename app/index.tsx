@@ -1,5 +1,5 @@
-import { useRouter } from 'expo-router';
 import React from 'react';
+import { useRouter } from 'expo-router';
 import {
   Image,
   StyleSheet,
@@ -8,30 +8,51 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+
+function validarEmail(email: string) {
+  const regexGmail = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+  return regexGmail.test(email);
+}
+
 export default function Login() {
   const router = useRouter();
-  const [login, setLogin] = React.useState("");
+  const [userInput, setUserInput] = React.useState("");
   const [senha, setSenha] = React.useState("");
+
   function handleLogin() {
-    if(login === "" || senha === "") {
-      alert("Prencha login e senha");
+    if (userInput.trim() === "" || senha === "") {
+      alert("Preencha o usuário/e-mail e a senha");
       return;
     }
-    router.push("/home");
 
+    if (userInput.includes("@") && !validarEmail(userInput)) {
+      alert("Formato de e-mail inválido. Use um endereço @gmail.com");
+      return;
+    }
+
+    const apelidoIdentificado = userInput.includes("@") ? userInput.split("@")[0] : userInput;
+
+    router.push({
+      pathname: "/home",
+      params: { apelido: apelidoIdentificado }
+    });
   }
+
   return (
     <View style={styles.container}>
       <Image
         source={require('../assets/images/fynix.jpeg')}
         style={styles.logo}
       />
+      
       <TextInput
-        placeholder="Digite seu email"
+        placeholder="Nome de usuário ou email"
         style={styles.input}
-        value={login}
-        onChangeText={setLogin}
+        value={userInput}
+        onChangeText={setUserInput}
+        autoCapitalize="none"
       />
+      
       <TextInput
         placeholder="Digite sua senha"
         style={styles.input}
@@ -39,37 +60,34 @@ export default function Login() {
         onChangeText={setSenha}
         secureTextEntry={true}
       />
-      <TouchableOpacity
-        style={styles.button}
-        onPress={handleLogin}
-      >
-        <Text style={styles.buttonText}>
-          Entrar
-        </Text>
+      
+      <TouchableOpacity style={styles.button} onPress={handleLogin}>
+        <Text style={styles.buttonText}>Entrar</Text>
       </TouchableOpacity>
+      
       <TouchableOpacity
          style={styles.secondaryButton}
          onPress={() => router.push("/register")}>
-        <Text style={styles.secondaryButtonText}>
-          Criar conta
-        </Text>
+        <Text style={styles.secondaryButtonText}>Criar conta</Text>
       </TouchableOpacity>
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    padding: 20,
+    justifyContent: 'flex-start',
+    paddingTop: 80,
+    paddingHorizontal: 20,
     backgroundColor: '#FFFFFF',
   },
   logo: {
-    width: 220,
-    height: 120,
+    width: 280,
+    height: 160,
     resizeMode: 'contain',
     alignSelf: 'center',
-    marginBottom: 30,
+    marginBottom: 40,
   },
   input: {
     borderWidth: 1,
@@ -96,7 +114,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
     borderColor: '#FF6B00',
-    backgroundColor: 'transparent',
   },
   secondaryButtonText: {
     color: '#FF6B00',
