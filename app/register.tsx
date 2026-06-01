@@ -1,147 +1,97 @@
-import React from "react";
+import { useState } from "react";
+import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useRouter } from "expo-router";
-import {
-    Image,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
-} from "react-native";
-
-function validarEmail(email: string) {
-  const regexGmail = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
-  return regexGmail.test(email);
-}
 
 export default function Register() {
+  const [email, setEmail] = useState("");
+  const [apelido, setApelido] = useState("");
+  const [senha, setSenha] = useState("");
   const router = useRouter();
 
-  const [nomeCompleto, setNomeCompleto] = React.useState("");
-  const [apelido, setApelido] = React.useState("");
-  const [email, setEmail] = React.useState("");
-  const [senha, setSenha] = React.useState("");
-  const [confirmarSenha, setConfirmarSenha] = React.useState("");
-
-  function handleRegister() {
-    if (nomeCompleto === "" || apelido === "" || email === "" || senha === "" || confirmarSenha === "") {
-        alert("Preencha todos os campos");
-        return;
+  const handleRegister = () => {
+    if (!email.includes("@") || !email.includes(".")) {
+      alert("Por favor, insira um e-mail válido.");
+      return;
+    }
+    if (!apelido.trim() || !senha.trim()) {
+      alert("Todos os campos são obrigatórios.");
+      return;
     }
 
-    if (!validarEmail(email)) {
-        alert("Por favor, insira um e-mail válido do Gmail (exemplo@gmail.com)");
-        return;
-    }
-
-    if (senha !== confirmarSenha) {
-        alert("As senhas não coincidem");
-        return;
-    }
-
-    alert("Cadastro realizado com sucesso!");
-    
-    router.push({
+    router.replace({
       pathname: "/home",
-      params: { apelido: apelido }
+      params: { apelido }
     });
-  }
+  };
 
   return (
     <View style={styles.container}>
-        <Image
-          source={require('../assets/images/fynix.jpeg')}
-          style={styles.logo}
-        />
-        
-        <TextInput
-          placeholder="Nome completo"
-          style={styles.input}
-          value={nomeCompleto}
-          onChangeText={setNomeCompleto}
-        />
+      <Text style={styles.titulo}>Criar Conta</Text>
 
-        <TextInput
-          placeholder="Apelido"
-          style={styles.input}
-          value={apelido}
-          onChangeText={setApelido}
-        />
+      <TextInput
+        style={styles.input}
+        placeholder="Apelido"
+        value={apelido}
+        onChangeText={setApelido}
+      />
 
-        <TextInput
-          placeholder="Digite seu email"
-          style={styles.input}
-          value={email}
-          onChangeText={setEmail}
-          keyboardType="email-address"
-          autoCapitalize="none"
-        />
-        
-        <TextInput
-          placeholder="Digite sua senha"
-          style={styles.input}
-          value={senha}
-          onChangeText={setSenha}
-          secureTextEntry
-        />
-        
-        <TextInput
-          placeholder="Confirme sua senha"
-          style={styles.input}
-          value={confirmarSenha}
-          onChangeText={setConfirmarSenha}
-          secureTextEntry
-        />
-        
-        <TouchableOpacity style={styles.button} onPress={handleRegister}>
-            <Text style={styles.buttonText}>Cadastrar</Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity onPress={() => router.push("/")}>
-            <Text style={styles.link}>Já tenho conta</Text>
-        </TouchableOpacity>
+      <TextInput
+        style={styles.input}
+        placeholder="E-mail (Qualquer domínio)"
+        keyboardType="email-address"
+        autoCapitalize="none"
+        value={email}
+        onChangeText={setEmail}
+      />
+
+      <TextInput
+        style={styles.input}
+        placeholder="Senha"
+        secureTextEntry
+        value={senha}
+        onChangeText={setSenha}
+      />
+
+      <TouchableOpacity style={styles.botao} onPress={handleRegister}>
+        <Text style={styles.botaoTexto}>Registrar</Text>
+      </TouchableOpacity>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: "flex-start",
-        paddingTop: 40,
-        paddingHorizontal: 20,
-        backgroundColor: "#ffffff",
-    },
-    logo: {
-        width: 280,
-        height: 120,
-        resizeMode: "contain",
-        alignSelf: "center",
-        marginBottom: 15,
-    },
-    input: {
-        borderWidth: 1,
-        borderColor: "#ccc",
-        borderRadius: 10,
-        padding: 12,
-        marginBottom: 10,
-    },
-    button: {
-        backgroundColor: "#FF6B00",
-        padding: 15,
-        borderRadius: 10,
-        alignItems: "center",
-        marginTop: 5,
-    },
-    buttonText: {
-        color: "#fff",
-        fontSize: 18,
-        fontWeight: "bold",
-    },
-    link: {
-        marginTop: 15,
-        textAlign: "center",
-        color: "#FF6B00",
-        fontWeight: "bold",
-    },
+  container: {
+    flex: 1,
+    backgroundColor: "#FFF",
+    padding: 20,
+    justifyContent: "center",
+  },
+  titulo: {
+    fontSize: 28,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: 30,
+    color: "#333",
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#EAEAEA",
+    borderRadius: 10,
+    padding: 15,
+    marginBottom: 15,
+    fontSize: 16,
+    backgroundColor: "#FAFAFA",
+  },
+  botao: {
+    backgroundColor: "#FF6B00",
+    padding: 15,
+    borderRadius: 10,
+    alignItems: "center",
+    marginTop: 10,
+  },
+  botaoTexto: {
+    color: "#FFF",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
 });

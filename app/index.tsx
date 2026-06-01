@@ -1,74 +1,59 @@
-import React from 'react';
-import { useRouter } from 'expo-router';
-import {
-  Image,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-
-function validarEmail(email: string) {
-  const regexGmail = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
-  return regexGmail.test(email);
-}
+import { useState } from "react";
+import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { useRouter } from "expo-router";
 
 export default function Login() {
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
   const router = useRouter();
-  const [userInput, setUserInput] = React.useState("");
-  const [senha, setSenha] = React.useState("");
 
-  function handleLogin() {
-    if (userInput.trim() === "" || senha === "") {
-      alert("Preencha o usuário/e-mail e a senha");
+  const handleLogin = () => {
+    // Validação genérica que aceita qualquer tipo de e-mail
+    if (!email.includes("@") || !email.includes(".")) {
+      alert("Por favor, insira um e-mail válido.");
+      return;
+    }
+    if (!senha.trim()) {
+      alert("Por favor, insira a sua senha.");
       return;
     }
 
-    if (userInput.includes("@") && !validarEmail(userInput)) {
-      alert("Formato de e-mail inválido. Use um endereço @gmail.com");
-      return;
-    }
-
-    const apelidoIdentificado = userInput.includes("@") ? userInput.split("@")[0] : userInput;
-
-    router.push({
+    // Navega para a home passando um apelido padrão ou extraído do e-mail
+    const apelidoUsuario = email.split("@")[0];
+    router.replace({
       pathname: "/home",
-      params: { apelido: apelidoIdentificado }
+      params: { apelido: apelidoUsuario }
     });
-  }
+  };
 
   return (
     <View style={styles.container}>
-      <Image
-        source={require('../assets/images/fynix.jpeg')}
-        style={styles.logo}
-      />
-      
+      <Text style={styles.titulo}>Fynix</Text>
+      <Text style={styles.subtitulo}>Faça login para continuar</Text>
+
       <TextInput
-        placeholder="Nome de usuário ou email"
         style={styles.input}
-        value={userInput}
-        onChangeText={setUserInput}
+        placeholder="E-mail"
+        keyboardType="email-address"
         autoCapitalize="none"
+        value={email}
+        onChangeText={setEmail}
       />
-      
+
       <TextInput
-        placeholder="Digite sua senha"
         style={styles.input}
+        placeholder="Senha"
+        secureTextEntry
         value={senha}
         onChangeText={setSenha}
-        secureTextEntry={true}
       />
-      
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Entrar</Text>
+
+      <TouchableOpacity style={styles.botao} onPress={handleLogin}>
+        <Text style={styles.botaoTexto}>Entrar</Text>
       </TouchableOpacity>
-      
-      <TouchableOpacity
-         style={styles.secondaryButton}
-         onPress={() => router.push("/register")}>
-        <Text style={styles.secondaryButtonText}>Criar conta</Text>
+
+      <TouchableOpacity style={styles.botaoCriarConta} onPress={() => router.push("/register")}>
+        <Text style={styles.textoCriarConta}>Não tem uma conta? Cadastre-se</Text>
       </TouchableOpacity>
     </View>
   );
@@ -77,47 +62,52 @@ export default function Login() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'flex-start',
-    paddingTop: 80,
-    paddingHorizontal: 20,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: "#FFF",
+    padding: 20,
+    justifyContent: "center",
   },
-  logo: {
-    width: 280,
-    height: 160,
-    resizeMode: 'contain',
-    alignSelf: 'center',
+  titulo: {
+    fontSize: 36,
+    fontWeight: "bold",
+    textAlign: "center",
+    color: "#FF6B00",
+    marginBottom: 5,
+  },
+  subtitulo: {
+    fontSize: 16,
+    color: "#666",
+    textAlign: "center",
     marginBottom: 40,
   },
   input: {
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: "#EAEAEA",
     borderRadius: 10,
     padding: 15,
     marginBottom: 15,
-  },
-  button: {
-    backgroundColor: '#FF6B00',
-    padding: 15,
-    borderRadius: 10,
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  secondaryButton: {
-    marginTop: 15,
-    padding: 15,
-    borderRadius: 10,
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#FF6B00',
-  },
-  secondaryButtonText: {
-    color: '#FF6B00',
     fontSize: 16,
-    fontWeight: 'bold',
+    backgroundColor: "#FAFAFA",
+    color: "#333",
+  },
+  botao: {
+    backgroundColor: "#FF6B00",
+    padding: 15,
+    borderRadius: 10,
+    alignItems: "center",
+    marginTop: 10,
+  },
+  botaoTexto: {
+    color: "#FFF",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  botaoCriarConta: {
+    marginTop: 20,
+    alignItems: "center",
+  },
+  textoCriarConta: {
+    color: "#FF6B00",
+    fontSize: 14,
+    fontWeight: "600",
   },
 });

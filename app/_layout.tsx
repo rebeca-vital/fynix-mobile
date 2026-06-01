@@ -1,10 +1,11 @@
 import { Stack } from "expo-router";
-import { FynixProvider } from "./context/fynixContext"; 
 
 export default function RootLayout() {
   return (
-    <FynixProvider>
-      <Stack screenOptions={{ headerShown: false }} />
-    </FynixProvider>
+    <Stack screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="index" />
+      <Stack.Screen name="register" />
+      <Stack.Screen name="home" />
+    </Stack>
   );
 }
