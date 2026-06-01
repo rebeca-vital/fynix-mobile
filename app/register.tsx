@@ -18,7 +18,7 @@ export default function Register() {
       return;
     }
 
-    router.replace({
+    router.push({
       pathname: "/home",
       params: { apelido, email },
     });

@@ -9,11 +9,13 @@ import {
     ScrollView,
 } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
+import { useTheme } from "./context/themeContext";
 
 
 export default function Perfil() {
     const router = useRouter();
     const params = useLocalSearchParams();
+    const { dark } = useTheme();
 
     const nomeInicial = params.apelido ? String(params.apelido) : "Usuário";
     const emailInicial = params.email ? String(params.email) : "";
@@ -26,32 +28,39 @@ export default function Perfil() {
         setEditando(false);
     }
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={[styles.container, dark &&{ backgroundColor: "#111"}]}>
 
         <View style={styles.header}>
             <Image
                 source={require("../assets/images/perfil.png")}
                 style={styles.avatar}
             />
-            <Text style={styles.nome}>{nome}</Text>
-            <Text style={styles.sub}>Perfil do usuário</Text>
+            <Text style={[styles.nome, dark && { color:"#fff"}]}>{nome}</Text>
+            <Text style={[styles.sub, dark && { color:"#fff"}]}>Perfil do usuário</Text>
         </View>
 
         
-        <View style={styles.card}>
-            <Text style={styles.label}>Nome</Text>
+        <View style={[styles.card, dark && { backgroundColor: "#1e1e1e", borderColor: "#333"}
+        ]}>
+            <Text style={[styles.label, dark && { color: "#aaa"}]}>Nome</Text>
 
             {editando ? (
                 <TextInput
-                    style={styles.input}
+                    style={[styles.input,
+                        dark && {
+                            backgroundColor: "#2a2a2a",
+                            color: "#fff",
+                            borderColor: "#444",
+                        },
+                   ]}
                     value={nome}
                     onChangeText={setNome}
                 />
             ) : (
-                <Text style={styles.value}>{nome}</Text>
+                <Text style={[styles.value, dark && { color: "#fff"}]}>{nome}</Text>
             )}
 
-            <Text style={styles.label}>Email</Text>
+            <Text style={[styles.label, dark && { color: "#aaa"}]}>Email</Text>
             {editando ? (
                 <TextInput
                     style={styles.input}
@@ -78,7 +87,7 @@ export default function Perfil() {
                         <Text style={styles.buttonText}>Salvar</Text>
                     </TouchableOpacity>
                 )}
-                <TouchableOpacity style={styles.outlineButton} onPress={() => router.back ()}>
+                <TouchableOpacity style={{ marginBottom: 10 }} onPress={() => router.back ()}>
 
                     <Text style={styles.outlineText}>Voltar</Text>
                 </TouchableOpacity>
@@ -89,7 +98,6 @@ export default function Perfil() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#fff",
         padding: 20,
     },
     header: {

@@ -20,7 +20,7 @@ export default function Login() {
 
     // Navega para a home passando um apelido padrão ou extraído do e-mail
     const apelidoUsuario = email.split("@")[0];
-    router.replace({
+    router.push({
       pathname: "/home",
       params: { apelido: apelidoUsuario }
     });

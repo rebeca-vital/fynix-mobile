@@ -1,11 +1,14 @@
 import { Stack } from "expo-router";
+import { ThemeProvider } from "./context/themeContext";
 
 export default function RootLayout() {
   return (
+    <ThemeProvider>
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen name="index" />
       <Stack.Screen name="register" />
       <Stack.Screen name="home" />
     </Stack>
+    </ThemeProvider>
   );
 }
